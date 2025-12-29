@@ -375,53 +375,6 @@ function maybeRunExam() {
   }
 }
 
-/** 年齡分段事件（示範版） */
-function runAgeSegmentEvent() {
-  let pool = [];
-
-  if (p.age <= 6) pool = childhoodEvents;
-  else if (p.age <= 18) pool = studentEvents;
-  else pool = adultEvents;
-
-  for (const evt of pool) {
-    if (Math.random() < evt.chance) {
-      evt.run(p, log);
-      break; // 一個月只觸發一個
-    }
-  }
-}
-
-function runAgeSegmentEvent() {
-  if (!p) return;
-
-  // 你之後要的「每個年齡段事件不同」就是在這裡擴充：
-  // - 幼年 0~6
-  // - 學生 7~18
-  // - 成人 19+
-  if (p.age <= 6) {
-    // 幼年
-    if (Math.random() < 0.35) {
-      p.sensibility += 1;
-      log("🧸 幼年事件：你對世界充滿好奇，感性 +1");
-    }
-    p.job = "幼兒";
-  } else if (p.age <= 18) {
-    // 學生
-    if (Math.random() < 0.35) {
-      p.intelligence += 1;
-      log("🎒 學生事件：你在學校學到新東西，智力 +1");
-    }
-    p.job = "學生";
-  } else {
-    // 成人
-    if (Math.random() < 0.35) {
-      const earn = randInt(80, 220);
-      p.wealth += earn;
-      log(`💼 成人事件：你有一筆額外收入，財富 +${earn}`);
-    }
-    p.job = "社會人士";
-  }
-}
 
 /** 把數值拉回合理範圍（避免越界） */
 function normalize() {
