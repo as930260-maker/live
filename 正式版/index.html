@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>人生模擬器（V4 可玩版）</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <!-- ====== 開始畫面 ====== -->
+  <main id="startScreen" class="page page-center">
+    <section class="card start-card">
+      <h1>人生模擬器</h1>
+      <p class="subtitle">依照 V4 規格做成可玩的版本</p>
+
+      <div class="input-group">
+        <label for="nameInput">名字</label>
+        <input id="nameInput" type="text" placeholder="輸入你的名字" maxlength="12" />
+      </div>
+
+      <div class="input-group">
+        <label>性別</label>
+        <div class="gender-select">
+          <input id="g-female" name="gender" type="radio" value="女" checked />
+          <label class="g-btn" for="g-female">女</label>
+
+          <input id="g-male" name="gender" type="radio" value="男" />
+          <label class="g-btn" for="g-male">男</label>
+
+          <input id="g-other" name="gender" type="radio" value="其他" />
+          <label class="g-btn" for="g-other">其他</label>
+        </div>
+      </div>
+
+      <div class="row gap">
+        <button id="newGameBtn" class="btn primary">開始新人生</button>
+        <button id="continueBtn" class="btn">繼續進度</button>
+      </div>
+
+      <p class="hint">
+        小提醒：本地存檔使用瀏覽器 localStorage。<br/>
+        你也可以在主畫面右上角按「存檔」。
+      </p>
+    </section>
+  </main>
+
+  <!-- ====== 主遊戲畫面 ====== -->
+  <main id="gameScreen" class="page hidden">
+    <header class="topbar">
+      <div class="topbar-left">
+        <strong id="titleName">玩家</strong>
+        <span class="pill" id="titleAge">0 歲</span>
+      </div>
+
+      <div class="topbar-right">
+        <button id="saveBtn" class="btn small">存檔</button>
+        <button id="resetBtn" class="btn small danger">重置</button>
+      </div>
+    </header>
+
+    <section class="layout">
+      <!-- 左：玩家資訊 -->
+      <section class="col card">
+        <h2>玩家資訊</h2>
+        <div class="kv">
+          <div class="k">名字</div><div class="v" id="uiName">-</div>
+          <div class="k">年紀</div><div class="v" id="uiAge">-</div>
+          <div class="k">性別</div><div class="v" id="uiGender">-</div>
+          <div class="k">居住地</div><div class="v" id="uiCity">-</div>
+          <div class="k">職業</div><div class="v" id="uiJob">-</div>
+          <div class="k">狀態</div><div class="v" id="uiStatus">-</div>
+        </div>
+
+        <h3 class="mt">家人關係</h3>
+        <div class="kv">
+          <div class="k">爸媽好感</div><div class="v"><span id="uiFamily">0</span> / 100</div>
+        </div>
+
+        <h3 class="mt">人生紀錄</h3>
+        <div class="kv">
+          <div class="k">上課進度</div><div class="v"><span id="uiSchool">0</span> / 5</div>
+          <div class="k">隨堂抽考</div><div class="v"><span id="uiExam">0</span> / 10</div>
+        </div>
+
+        <div class="mt row gap">
+          <button id="gmHelpBtn" class="btn">GM 指令</button>
+          <button id="clearLogBtn" class="btn">清空紀錄</button>
+        </div>
+      </section>
+
+      <!-- 中：核心數值 -->
+      <section class="col card">
+        <h2>核心數值</h2>
+        <div class="stats">
+          <div class="stat"><div class="label">財富</div><div class="value" id="uiWealth">0</div></div>
+          <div class="stat"><div class="label">健康</div><div class="value" id="uiHealth">0</div></div>
+          <div class="stat"><div class="label">體力</div><div class="value" id="uiStamina">0</div></div>
+          <div class="stat"><div class="label">智力</div><div class="value" id="uiInt">0</div></div>
+          <div class="stat"><div class="label">魅力</div><div class="value" id="uiCharm">0</div></div>
+          <div class="stat"><div class="label">感性</div><div class="value" id="uiSens">0</div></div>
+          <div class="stat"><div class="label">善良</div><div class="value" id="uiKind">0</div></div>
+          <div class="stat"><div class="label">幸運</div><div class="value" id="uiLuck">0</div></div>
+        </div>
+
+        <h3 class="mt">這個月要做什麼？</h3>
+        <div class="actions">
+          <button class="btn action" data-action="study">上課</button>
+          <button class="btn action" data-action="work">打工</button>
+          <button class="btn action" data-action="rest">休息</button>
+          <button class="btn action" data-action="family">陪家人</button>
+          <button class="btn action" data-action="social">社交</button>
+          <button class="btn action" data-action="random">隨機事件</button>
+        </div>
+
+        <div class="mt row gap">
+          <button id="backBtn" class="btn">返回（回開始畫面）</button>
+          <button id="nextMonthBtn" class="btn primary">下個月</button>
+        </div>
+
+        <p class="hint mt">
+          每月結算後會觸發「年齡分段事件」示範（幼年/學生/成人）。你之後可加更多事件。
+        </p>
+      </section>
+
+      <!-- 右：日誌 -->
+      <section class="col card">
+        <h2>事件／紀錄</h2>
+        <div id="log" class="log"></div>
+      </section>
+    </section>
+  </main>
+
+  <!-- ====== GM 彈窗（簡單版） ====== -->
+  <dialog id="gmDialog" class="dialog">
+    <form method="dialog" class="dialog-body">
+      <h3>GM 指令</h3>
+      <p class="hint">
+        這裡是方便你測試的工具（不用改也能玩）。<br/>
+        指令格式：<code>set money 500</code>、<code>add luck 3</code>、<code>event</code>
+      </p>
+      <input id="gmInput" class="gm-input" placeholder="輸入指令..." />
+      <div class="row gap mt">
+        <button id="gmRunBtn" class="btn primary" value="default">執行</button>
+        <button class="btn" value="cancel">關閉</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./main.js"></script>
+</body>
+</html>
