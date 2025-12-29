@@ -6,6 +6,9 @@
    - 每月結算走 nextMonth()
    - 存檔用 localStorage
    ========================================================= */
+import { childhoodEvents } from "./events/childhood.js";
+import { studentEvents } from "./events/student.js";
+import { adultEvents } from "./events/adult.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -373,6 +376,21 @@ function maybeRunExam() {
 }
 
 /** 年齡分段事件（示範版） */
+function runAgeSegmentEvent() {
+  let pool = [];
+
+  if (p.age <= 6) pool = childhoodEvents;
+  else if (p.age <= 18) pool = studentEvents;
+  else pool = adultEvents;
+
+  for (const evt of pool) {
+    if (Math.random() < evt.chance) {
+      evt.run(p, log);
+      break; // 一個月只觸發一個
+    }
+  }
+}
+
 function runAgeSegmentEvent() {
   if (!p) return;
 
